@@ -1,0 +1,113 @@
+
+Docker is a container management service. The keywords of Docker are develop, ship and run anywhere. The whole idea of Docker is for developers to easily develop applications, ship them into containers which can then be deployed anywhere.
+Docker is a software containerization platform, meaning you can build your application, package them along with their dependencies into a container and then these containers can be easily shipped to run on other machines. 
+
+Benefits of Docker
+Now, the QA team need not install all the dependent software and applications to test the code and this helps them save lots of time and energy. This also ensures that the working environment is consistent across all the individuals involved in the process, starting from development to deployment. The number of systems can be scaled up easily and the code can be deployed on them effortlessly.
+Docker has the ability to reduce the size of development by providing a smaller footprint of the operating system via containers.
+
+With containers, it becomes easier for teams across different units, such as development, QA and Operations to work seamlessly across applications.
+
+You can deploy Docker containers anywhere, on any physical and virtual machines and even on the cloud.
+
+Since Docker containers are pretty lightweight, they are very easily scalable.
+
+Docker Engine − It is used for building Docker images and creating Docker containers.
+
+Docker Hub − This is the registry which is used to host various Docker images.
+
+Docker Compose − This is used to define applications using multiple Docker containers.
+
+https://hub.docker.com/
+
+docker -v
+
+docker login
+
+
+docker images
+
+
+Dockerfile
+# Start with a base image containing Java runtime
+FROM openjdk:8
+
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
+
+ADD target/spring-boot-docker-maven.jar spring-boot-docker-maven.jar
+
+# Run the jar file 
+ENTRYPOINT ["java","-jar","spring-boot-docker-maven.jar"]
+
+
+docker build -f Dockerfile -t dockerImageName pathWhereDockerfilePresent[ . means filePresentCurrentPath]  >> docker build -f Dockerfile -t docker-spring-boot .
+
+
+
+docker tag firstimage YOUR_DOCKERHUB_NAME/firstimage  >> docker tag docker-spring-boot:latest avinashjbs/docker-spring-boot
+
+docker run -p portwanttogiven:dockerExposedPort imageName >> docker run -p 8085:8080 docker-spring-boot
+
+docker push tagedDockerImapge >> docker push avinashjbs/docker-spring-boot
+
+docker pull avinashjbs/docker-spring-boot:latest
+
+#Remove images from docker server
+docker rmi avinashjbs/docker-spring-boot
+
+#returns a list of all running containers
+docker ps
+
+#return all containers.
+docker ps -a
+
+#run our container by passing the ID returned by docker ps -a 
+docker run fe1f71042611
+
+#pause our container by passing the ID returned by docker ps -a 
+docker pause fe1f71042611
+
+#stop our container by passing the ID returned by docker ps -a 
+docker kill 35c296a509b9
+
+#docker --help
+docker --help
+
+
+docker pull mysql
+
+#Run mysql image to use in spring boot direclty use another port to expose 
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=test -e MYSQL_USER=sa -e MYSQL_PASSWORD=password -p 3366:3306 -d mysql:latest
+
+#it will open mysql bash
+docker exec -it mysql bash
+
+#mysql command to enter in database
+ mysql -uroot -p
+
+docker run --name mysql-standalone -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=test -e MYSQL_USER=sa -e MYSQL_PASSWORD=password -d mysql:latest
+
+#shows running container
+docker container ls
+
+In the Spring Boot Application, use the same container name of the mysql instance in the application.properties spring.datasource.url = jdbc:mysql://mysql-standalone:3306/test
+
+#build the maven clean install skip testing
+
+Run the Docker image (users-mysql) created in #4. 
+docker build . -t users-mysql
+
+docker run -p 8086:8086 --name users-mysql --link mysql-standalone:mysql -d users-mysql
+
+docker logs mysql-standalone
+
+http://localhost:8086/all/create
+
+docker logs users-mysql
+
+docker images
+docker container ls
+docker logs <container_name>
+docker container rm <container_name
+docker image rm <image_name
